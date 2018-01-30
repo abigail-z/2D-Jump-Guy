@@ -50,14 +50,17 @@ public class PlayerController : MonoBehaviour
         {
             if (moveHorizontal != 0)
             {
-                spinDirection = moveHorizontal > 0 ? -1 : 1;
+                spinDirection = moveHorizontal > 0 ? -1 : 1; // i hate these
             }
             
-            sprite.transform.Rotate(new Vector3(0,0, spinDirection) * Time.deltaTime * spinSpeed);
+            if (spinDirection != 0)
+            {
+                sprite.transform.Rotate(new Vector3(0, 0, spinDirection) * Time.deltaTime * spinSpeed);
+            }
         }
         else
         {
-            sprite.transform.rotation = Quaternion.identity;
+            sprite.transform.rotation = Quaternion.identity; // resets to no rotation
             spinDirection = 0;
         }
 	}
@@ -79,6 +82,7 @@ public class PlayerController : MonoBehaviour
             jumpPressed = false;
         }
 
+        // horizontal movement
         Vector2 myVelocity = rb.velocity;
         myVelocity.x = moveHorizontal * moveSpeed;
 
@@ -92,6 +96,7 @@ public class PlayerController : MonoBehaviour
             }
             jumpReleased = false;
         }
+        // apply velocity to the RigidBody2D
         rb.velocity = myVelocity;
     }
 }
