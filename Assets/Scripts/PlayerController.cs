@@ -6,13 +6,15 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpPower;
-    public float spinSpeed;
+    public uint jumpLenienceTicks;
+    public float spinsPerSecond;
     public GameObject sprite;
     public LayerMask groundLayers;
 
     private Rigidbody2D rb;
     private bool isGrounded;
     private int spinDirection;
+    private uint jumpWindow;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
@@ -23,9 +25,8 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        Vector2 groundCheckStart = new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f);
-        Vector2 groundCheckEnd = new Vector2(transform.position.x + 0.5f, transform.position.y - 0.51f);
-        isGrounded = Physics2D.OverlapArea(groundCheckStart, groundCheckEnd, groundLayers);
+        isGrounded = GroundCheck();
+        jumpWindow = isGrounded ? jumpLenienceTicks : 0;
 
         spinDirection = 0;
         moveHorizontal = 0f;
@@ -55,7 +56,7 @@ public class PlayerController : MonoBehaviour
             
             if (spinDirection != 0)
             {
-                sprite.transform.Rotate(new Vector3(0, 0, spinDirection) * Time.deltaTime * spinSpeed);
+                sprite.transform.Rotate(new Vector3(0, 0, spinDirection * 360) * Time.deltaTime * spinsPerSecond);
             }
         }
         else
@@ -68,23 +69,30 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called once per game tick
     void FixedUpdate()
     {
-        Vector2 groundCheckStart = new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f);
-        Vector2 groundCheckEnd = new Vector2(transform.position.x + 0.5f, transform.position.y - 0.51f);
-        isGrounded = Physics2D.OverlapArea(groundCheckStart, groundCheckEnd, groundLayers);
-
-        // jump has to be handled first so the upward velocity is included in rb.velocity
-        if (jumpPressed)
+        isGrounded = GroundCheck();
+        if (isGrounded)
         {
-            if (isGrounded)
-            {
-                rb.AddForce(Vector2.up * jumpPower);
-            }
-            jumpPressed = false;
+            jumpWindow = jumpLenienceTicks;
+        }
+        else if(jumpWindow > 0)
+        {
+            jumpWindow--;
         }
 
         // horizontal movement
         Vector2 myVelocity = rb.velocity;
         myVelocity.x = moveHorizontal * moveSpeed;
+
+        // jump has to be handled first so the upward velocity is included in rb.velocity
+        if (jumpPressed)
+        {
+            if (isGrounded || jumpWindow > 0)
+            {
+                myVelocity.y = jumpPower;
+                jumpWindow = 0;
+            }
+            jumpPressed = false;
+        }
 
         // jumpReleased handled after jump and movement to minimize rewriting rb.velocity
         // and to handle the case where both jumpPressed and jumpReleased are true on the same FixedUpdate
@@ -98,5 +106,12 @@ public class PlayerController : MonoBehaviour
         }
         // apply velocity to the RigidBody2D
         rb.velocity = myVelocity;
+    }
+
+    bool GroundCheck()
+    {
+        Vector2 groundCheckStart = new Vector2(transform.position.x - 0.49f, transform.position.y - 0.5f);
+        Vector2 groundCheckEnd = new Vector2(transform.position.x + 0.49f, transform.position.y - 0.51f);
+        return Physics2D.OverlapArea(groundCheckStart, groundCheckEnd, groundLayers);
     }
 }

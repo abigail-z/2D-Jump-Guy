@@ -479,6 +479,41 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: jumpLenience
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: jumpPower
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: spinSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: rotationsPerSecond
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: jumpLenienceTicks
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: spinsPerSecond
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 212674616891655200, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75743ba577b5714478d1515d790cf368, type: 2}
   m_IsPrefabParent: 0
@@ -592,6 +627,7 @@ GameObject:
   - component: {fileID: 1306751088}
   - component: {fileID: 1306751087}
   - component: {fileID: 1306751086}
+  - component: {fileID: 1306751090}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -633,7 +669,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -656,12 +692,25 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1306751085}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1306751090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1306751085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da3970d443c1e31448b3956928befc0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2111687022}
+  cameraSpeed: 1
 --- !u!1 &1420051921
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,6 +798,21 @@ Prefab:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114119795644821756, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758,
+        type: 2}
+      propertyPath: groundLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 50583540929913810, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758,
+        type: 2}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2111687022 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1549944874901736, guid: 75743ba577b5714478d1515d790cf368,
+    type: 2}
+  m_PrefabInternal: {fileID: 900493001}
