@@ -57,4 +57,14 @@ public class EnemyMovement : MonoBehaviour
             return Physics2D.Raycast(rb.position, Vector2.right, radius + 0.1f, groundLayers);
         }
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Collider2D col = collision.collider;
+        if (col.CompareTag("Player"))
+        {
+            PlayerController pc = col.gameObject.GetComponent<PlayerController>();
+            StartCoroutine(pc.TakeDamage(transform.position, 20));
+        }
+    }
 }

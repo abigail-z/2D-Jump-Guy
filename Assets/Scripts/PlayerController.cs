@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define DEBUG
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +12,17 @@ public class PlayerController : MonoBehaviour
     public float spinsPerSecond;
     public GameObject sprite;
     public LayerMask groundLayers;
+    public uint maxHealth;
+    public uint invincibilityTime;
 
+    private uint health;
     private Rigidbody2D rb;
     private bool isGrounded;
     private int spinDirection;
     private uint jumpWindow;
+    public bool knockedBack;
+    public bool hurtable;
+    private SpriteRenderer spriteRenderer;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
@@ -24,9 +32,12 @@ public class PlayerController : MonoBehaviour
     void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = sprite.GetComponent<SpriteRenderer>();
 
         isGrounded = GroundCheck();
         jumpWindow = isGrounded ? jumpLenienceTicks : 0;
+        knockedBack = false;
+        hurtable = true;
 
         spinDirection = 0;
         moveHorizontal = 0f;
@@ -37,14 +48,18 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        if (!knockedBack)
+        {
+            moveHorizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpPressed = true;
-        } else if (Input.GetButtonUp("Jump"))
-        {
-            jumpReleased = true;
+            if (Input.GetButtonDown("Jump"))
+            {
+                jumpPressed = true;
+            }
+            else if (Input.GetButtonUp("Jump"))
+            {
+                jumpReleased = true;
+            }
         }
 
         if (!isGrounded)
@@ -79,6 +94,16 @@ public class PlayerController : MonoBehaviour
             jumpWindow--;
         }
 
+        // don't allow input during knockback
+        if (knockedBack)
+        {
+            if (!isGrounded)
+            {
+                return;
+            }
+            knockedBack = false;
+        }
+
         // horizontal movement
         Vector2 myVelocity = rb.velocity;
         myVelocity.x = moveHorizontal * moveSpeed;
@@ -110,8 +135,71 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
-        Vector2 groundCheckStart = new Vector2(transform.position.x - 0.49f, transform.position.y - 0.5f);
-        Vector2 groundCheckEnd = new Vector2(transform.position.x + 0.49f, transform.position.y - 0.51f);
-        return Physics2D.OverlapArea(groundCheckStart, groundCheckEnd, groundLayers);
+        Vector2 leftCheckOrigin = new Vector2(transform.position.x - 0.5f, transform.position.y);
+        Vector2 rightCheckOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
+
+        #if DEBUG
+        Debug.DrawRay(leftCheckOrigin, Vector2.down, Color.blue);
+        Debug.DrawRay(rightCheckOrigin, Vector2.down, Color.blue);
+        #endif
+
+        bool leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, 0.52f, groundLayers);
+        bool rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, 0.52f, groundLayers);
+        return leftCheck || rightCheck;
+    }
+
+    internal IEnumerator TakeDamage(Vector2 enemyPos, float knockBackPower)
+    {
+        // start with applying movement, this should happen even when invincible
+        // set current velocity to 0 to prevent movement affecting knockback
+        rb.velocity = Vector2.zero;
+
+        Vector2 knockBackDirection = (Vector2)rb.position - enemyPos;
+        if (isGrounded)
+        {
+            knockBackDirection += Vector2.up;
+        }
+
+        Vector2.ClampMagnitude(knockBackDirection, 1);
+        rb.AddForce(knockBackDirection * knockBackPower, ForceMode2D.Impulse);
+        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3);
+
+        // if currently invincible from recent damage, exit here
+        if (!hurtable)
+        {
+            yield break;
+        }
+
+        // set up the state of knocked back
+        isGrounded = false;
+        knockedBack = true;
+        hurtable = false;
+
+        // damage and death
+        health--;
+        if (health <= 0)
+        {
+            // TODO: do death stuff
+            // don't continue with rest of stuff so body bounces around without doing invuln flash
+            yield break;
+        }
+        
+        // code executed along with each FixedUpdate
+        for (uint i = 0; i < invincibilityTime; i++)
+        {
+            // maybe this should be framerate dependent instead of tick dependent?
+            if (spriteRenderer.enabled)
+            {
+                spriteRenderer.enabled = false;
+            }
+            else
+            {
+                spriteRenderer.enabled = true;
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+        knockedBack = false;
+        hurtable = true;
     }
 }
