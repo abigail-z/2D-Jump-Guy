@@ -15,9 +15,10 @@ public class PlayerController : MonoBehaviour
     public uint maxHealth;
     public uint invincibilityTime;
 
+    // private vars
     private uint health;
     private Rigidbody2D rb;
-    private bool isGrounded;
+    public bool isGrounded;
     private int spinDirection;
     private uint jumpWindow;
     public bool knockedBack;
@@ -64,9 +65,9 @@ public class PlayerController : MonoBehaviour
 
         if (!isGrounded)
         {
-            if (moveHorizontal != 0)
+            if (rb.velocity.x != 0)
             {
-                spinDirection = moveHorizontal > 0 ? -1 : 1; // i hate these
+                spinDirection = rb.velocity.x > 0 ? -1 : 1; // i hate these
             }
             
             if (spinDirection != 0)
@@ -170,8 +171,14 @@ public class PlayerController : MonoBehaviour
             yield break;
         }
 
+        // freezeframe
+        Time.timeScale = 0.1f;
+        spriteRenderer.color = Color.white;
+        yield return new WaitForSecondsRealtime(0.1f);
+        Time.timeScale = 1;
+        spriteRenderer.color = Color.green;
+
         // set up the state of knocked back
-        isGrounded = false;
         knockedBack = true;
         hurtable = false;
 

@@ -454,6 +454,36 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 2111687022}
+    - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: orthographic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: field of view
+      value: 159
+      objectReference: {fileID: 0}
+    - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: m_Depth
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: m_HDR
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 124599648926092486, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 81133449534549668, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c573236cee4908b4b8f7791f6f4a49d1, type: 2}
   m_IsPrefabParent: 0
