@@ -218,6 +218,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(damageFlashPeriod);
         }
         spriteRenderer.enabled = true;
+        knockedBack = false; // just in case, this only makes a difference if character is falling for really long time
     }
 
     private IEnumerator InvulnTime()

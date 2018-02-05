@@ -616,7 +616,17 @@ Prefab:
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: damageFlashFrequency
-      value: 50
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: freezeFrameLength
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: damageFlashPeriod
+      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75743ba577b5714478d1515d790cf368, type: 2}
