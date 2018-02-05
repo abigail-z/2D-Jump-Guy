@@ -602,7 +602,7 @@ Prefab:
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: invincibilityTime
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
@@ -612,6 +612,11 @@ Prefab:
     - target: {fileID: 1549944874901736, guid: 75743ba577b5714478d1515d790cf368, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: damageFlashFrequency
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75743ba577b5714478d1515d790cf368, type: 2}

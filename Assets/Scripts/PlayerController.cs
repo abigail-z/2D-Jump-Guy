@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayers;
     public uint maxHealth;
     public uint invincibilityTime;
+    public float damageFlashPeriod;
+    public float freezeFrameLength;
 
     // private vars
     private uint health;
@@ -136,6 +138,11 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
+        if (rb.velocity.y > 0)
+        {
+            return false;
+        }
+
         Vector2 leftCheckOrigin = new Vector2(transform.position.x - 0.5f, transform.position.y);
         Vector2 rightCheckOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
 
@@ -155,32 +162,27 @@ public class PlayerController : MonoBehaviour
         // set current velocity to 0 to prevent movement affecting knockback
         rb.velocity = Vector2.zero;
 
+        // if grounded, send at a horizontal
         Vector2 knockBackDirection = (Vector2)rb.position - enemyPos;
         if (isGrounded)
         {
             knockBackDirection += Vector2.up;
+            Vector2 pos = rb.position;
+            pos.x += 0.01f;
+            rb.position = pos;
         }
 
+        // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
         Vector2.ClampMagnitude(knockBackDirection, 1);
         rb.AddForce(knockBackDirection * knockBackPower, ForceMode2D.Impulse);
-        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3);
+        knockedBack = true;
+        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3); // DEBUG
 
         // if currently invincible from recent damage, exit here
         if (!hurtable)
         {
             yield break;
         }
-
-        // freezeframe
-        Time.timeScale = 0.1f;
-        spriteRenderer.color = Color.white;
-        yield return new WaitForSecondsRealtime(0.1f);
-        Time.timeScale = 1;
-        spriteRenderer.color = Color.green;
-
-        // set up the state of knocked back
-        knockedBack = true;
-        hurtable = false;
 
         // damage and death
         health--;
@@ -190,11 +192,20 @@ public class PlayerController : MonoBehaviour
             // don't continue with rest of stuff so body bounces around without doing invuln flash
             yield break;
         }
-        
-        // code executed along with each FixedUpdate
-        for (uint i = 0; i < invincibilityTime; i++)
+
+        // freezeframe
+        Time.timeScale = 0.1f;
+        spriteRenderer.color = Color.white;
+        yield return new WaitForSecondsRealtime(freezeFrameLength);
+        Time.timeScale = 1;
+        spriteRenderer.color = Color.green;
+
+        // start invulnerability timer
+        StartCoroutine(InvulnTime());
+
+        // invulerability flashing
+        while (!hurtable)
         {
-            // maybe this should be framerate dependent instead of tick dependent?
             if (spriteRenderer.enabled)
             {
                 spriteRenderer.enabled = false;
@@ -204,9 +215,17 @@ public class PlayerController : MonoBehaviour
                 spriteRenderer.enabled = true;
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForSeconds(damageFlashPeriod);
         }
-        knockedBack = false;
+        spriteRenderer.enabled = true;
+    }
+
+    private IEnumerator InvulnTime()
+    {
+        hurtable = false;
+
+        yield return new WaitForSeconds(invincibilityTime);
+
         hurtable = true;
     }
 }

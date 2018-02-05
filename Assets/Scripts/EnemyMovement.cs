@@ -64,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            StartCoroutine(pc.TakeDamage(transform.position, 20));
+            StartCoroutine(pc.TakeDamage(transform.position, 15));
         }
     }
 }
