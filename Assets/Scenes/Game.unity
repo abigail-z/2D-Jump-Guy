@@ -602,7 +602,7 @@ Prefab:
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: invincibilityTime
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
@@ -621,12 +621,22 @@ Prefab:
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: freezeFrameLength
-      value: 0.1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: damageFlashPeriod
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: freezeFrameTimescale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
+        type: 2}
+      propertyPath: invulnerabilityTime
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75743ba577b5714478d1515d790cf368, type: 2}
@@ -857,6 +867,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1160560611494556, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629038523385416, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629038523385416, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}
+      propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

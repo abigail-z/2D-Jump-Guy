@@ -13,19 +13,21 @@ public class PlayerController : MonoBehaviour
     public GameObject sprite;
     public LayerMask groundLayers;
     public uint maxHealth;
-    public uint invincibilityTime;
+    public float invulnerabilityTime;
     public float damageFlashPeriod;
     public float freezeFrameLength;
+    public float freezeFrameTimescale;
 
     // private vars
     private uint health;
     private Rigidbody2D rb;
-    public bool isGrounded;
+    private bool isGrounded;
     private int spinDirection;
     private uint jumpWindow;
-    public bool knockedBack;
-    public bool hurtable;
+    private bool knockedBack;
+    private bool hurtable;
     private SpriteRenderer spriteRenderer;
+    private float widthFromCenter;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
         jumpWindow = isGrounded ? jumpLenienceTicks : 0;
         knockedBack = false;
         hurtable = true;
+        widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
 
         spinDirection = 0;
         moveHorizontal = 0f;
@@ -143,16 +146,17 @@ public class PlayerController : MonoBehaviour
             return false;
         }
 
-        Vector2 leftCheckOrigin = new Vector2(transform.position.x - 0.5f, transform.position.y);
-        Vector2 rightCheckOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
+        Vector2 leftCheckOrigin = new Vector2(transform.position.x - widthFromCenter, transform.position.y);
+        Vector2 rightCheckOrigin = new Vector2(transform.position.x + widthFromCenter, transform.position.y);
 
         #if DEBUG
         Debug.DrawRay(leftCheckOrigin, Vector2.down, Color.blue);
         Debug.DrawRay(rightCheckOrigin, Vector2.down, Color.blue);
         #endif
 
-        bool leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, 0.52f, groundLayers);
-        bool rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, 0.52f, groundLayers);
+        // assuming width = height
+        bool leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, widthFromCenter + 0.2f, groundLayers);
+        bool rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, widthFromCenter + 0.2f, groundLayers);
         return leftCheck || rightCheck;
     }
 
@@ -194,7 +198,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // freezeframe
-        Time.timeScale = 0.1f;
+        Time.timeScale = freezeFrameTimescale;
         spriteRenderer.color = Color.white;
         yield return new WaitForSecondsRealtime(freezeFrameLength);
         Time.timeScale = 1;
@@ -225,7 +229,7 @@ public class PlayerController : MonoBehaviour
     {
         hurtable = false;
 
-        yield return new WaitForSeconds(invincibilityTime);
+        yield return new WaitForSeconds(invulnerabilityTime);
 
         hurtable = true;
     }

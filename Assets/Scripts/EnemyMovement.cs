@@ -9,13 +9,13 @@ public class EnemyMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private int direction;
-    private float radius;
+    private float widthFromCenter;
 
 	// Use this for initialization
 	void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
-        radius = GetComponent<Collider2D>().bounds.extents.x;
+        widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
 
         // get movement direction
         if (Random.value >= 0.5)
@@ -50,11 +50,11 @@ public class EnemyMovement : MonoBehaviour
     {
         if (direction < 0)
         {
-            return Physics2D.Raycast(rb.position, Vector2.left, radius + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.left, widthFromCenter + 0.1f, groundLayers);
         }
         else
         {
-            return Physics2D.Raycast(rb.position, Vector2.right, radius + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.right, widthFromCenter + 0.1f, groundLayers);
         }
     }
 
