@@ -564,7 +564,7 @@ Prefab:
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
       propertyPath: jumpPower
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
@@ -876,6 +876,11 @@ Prefab:
     - target: {fileID: 4629038523385416, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}
       propertyPath: m_LocalScale.x
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114119795644821756, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758,
+        type: 2}
+      propertyPath: knockback
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fd3d0ac99a8bff44ba0dc1e24bd4758, type: 2}

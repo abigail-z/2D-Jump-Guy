@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float moveSpeed;
+    public float knockback;
     public LayerMask groundLayers;
 
     private Rigidbody2D rb;
@@ -64,7 +65,7 @@ public class EnemyMovement : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            StartCoroutine(pc.TakeDamage(transform.position, 15));
+            StartCoroutine(pc.TakeDamage(transform.position, knockback));
         }
     }
 }
