@@ -6,7 +6,7 @@ public class EnemyMovement : MonoBehaviour
 {
     public float moveSpeed;
     public float knockback;
-    public LayerMask groundLayers;
+    public LayerMask wallLayers;
 
     private Rigidbody2D rb;
     private int direction;
@@ -51,11 +51,11 @@ public class EnemyMovement : MonoBehaviour
     {
         if (direction < 0)
         {
-            return Physics2D.Raycast(rb.position, Vector2.left, widthFromCenter + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.left, widthFromCenter + 0.1f, wallLayers);
         }
         else
         {
-            return Physics2D.Raycast(rb.position, Vector2.right, widthFromCenter + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.right, widthFromCenter + 0.1f, wallLayers);
         }
     }
 
