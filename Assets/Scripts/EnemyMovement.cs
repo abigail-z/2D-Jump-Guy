@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
     public float moveSpeed;
-    public LayerMask groundLayers;
+    public float knockback;
+    public LayerMask wallLayers;
 
     private Rigidbody2D rb;
     private int direction;
     private float widthFromCenter;
 
 	// Use this for initialization
-	void Start ()
+	void OnEnable ()
     {
         rb = GetComponent<Rigidbody2D>();
         widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
@@ -26,12 +25,6 @@ public class EnemyMovement : MonoBehaviour
         {
             direction = -1; // left
         }
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
 	}
 
     void FixedUpdate()
@@ -50,11 +43,11 @@ public class EnemyMovement : MonoBehaviour
     {
         if (direction < 0)
         {
-            return Physics2D.Raycast(rb.position, Vector2.left, widthFromCenter + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.left, widthFromCenter + 0.1f, wallLayers);
         }
         else
         {
-            return Physics2D.Raycast(rb.position, Vector2.right, widthFromCenter + 0.1f, groundLayers);
+            return Physics2D.Raycast(rb.position, Vector2.right, widthFromCenter + 0.1f, wallLayers);
         }
     }
 
@@ -64,7 +57,7 @@ public class EnemyMovement : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            StartCoroutine(pc.TakeDamage(transform.position, 15));
+            StartCoroutine(pc.TakeDamage(transform.position, knockback));
         }
     }
 }

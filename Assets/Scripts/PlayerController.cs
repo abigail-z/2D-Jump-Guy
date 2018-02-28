@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool hurtable;
     private SpriteRenderer spriteRenderer;
     private float widthFromCenter;
+    private float heightFromCenter;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
         knockedBack = false;
         hurtable = true;
         widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
+        heightFromCenter = GetComponent<Collider2D>().bounds.extents.y;
 
         spinDirection = 0;
         moveHorizontal = 0f;
@@ -146,17 +148,17 @@ public class PlayerController : MonoBehaviour
             return false;
         }
 
-        Vector2 leftCheckOrigin = new Vector2(transform.position.x - widthFromCenter, transform.position.y);
-        Vector2 rightCheckOrigin = new Vector2(transform.position.x + widthFromCenter, transform.position.y);
+        Vector2 leftCheckOrigin = new Vector2(transform.position.x - widthFromCenter - 0.05f, transform.position.y - heightFromCenter);
+        Vector2 rightCheckOrigin = new Vector2(transform.position.x + widthFromCenter + 0.05f, transform.position.y - heightFromCenter);
 
         #if DEBUG
         Debug.DrawRay(leftCheckOrigin, Vector2.down, Color.blue);
         Debug.DrawRay(rightCheckOrigin, Vector2.down, Color.blue);
         #endif
 
-        // assuming width = height
-        bool leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, widthFromCenter + 0.2f, groundLayers);
-        bool rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, widthFromCenter + 0.2f, groundLayers);
+        RaycastHit2D leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, 0.1f, groundLayers);
+        RaycastHit2D rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, 0.1f, groundLayers);
+
         return leftCheck || rightCheck;
     }
 

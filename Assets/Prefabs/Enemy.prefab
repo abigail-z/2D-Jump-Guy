@@ -129,9 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  groundLayers:
+  knockback: 0
+  wallLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
 --- !u!212 &212639036111405904
 SpriteRenderer:
   m_ObjectHideFlags: 1
