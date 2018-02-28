@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -13,7 +11,7 @@ public class EnemyMovement : MonoBehaviour
     private float widthFromCenter;
 
 	// Use this for initialization
-	void Start ()
+	void OnEnable ()
     {
         rb = GetComponent<Rigidbody2D>();
         widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
@@ -27,12 +25,6 @@ public class EnemyMovement : MonoBehaviour
         {
             direction = -1; // left
         }
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
 	}
 
     void FixedUpdate()
