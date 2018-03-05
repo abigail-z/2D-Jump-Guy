@@ -17,8 +17,7 @@ public class ObjectPool : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        pool.Push(objectToPool);
-        for (uint i = 0; i < maxCount - 1; ++i)
+        for (uint i = 0; i < maxCount; ++i)
         {
             GameObject obj = Instantiate(objectToPool);
             obj.SetActive(false);
