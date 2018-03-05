@@ -357,6 +357,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114439000045968034, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: maxFollowTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114439000045968034, guid: c573236cee4908b4b8f7791f6f4a49d1,
+        type: 2}
+      propertyPath: maxFollowSpeed
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c573236cee4908b4b8f7791f6f4a49d1, type: 2}
   m_IsPrefabParent: 0

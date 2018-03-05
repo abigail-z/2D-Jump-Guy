@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public GameObject player;
-    public PlayerController playerController;
+    public GameObject objectToFollow;
     public float maxFollowTime;
     public float maxFollowSpeed;
 
@@ -14,7 +13,7 @@ public class CameraController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        Vector3 playerPos = player.transform.position;
+        Vector3 playerPos = objectToFollow.transform.position;
         playerPos.z = -1;
         transform.position = playerPos;
         refVelocity = Vector3.zero;
@@ -22,7 +21,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        Vector3 playerPos = player.transform.position;
+        Vector3 playerPos = objectToFollow.transform.position;
         playerPos.z = -1;
         transform.position = Vector3.SmoothDamp(transform.position, playerPos, ref refVelocity, maxFollowTime, maxFollowSpeed, Time.deltaTime);
     }
