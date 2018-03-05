@@ -1,7 +1,4 @@
-﻿#define DEBUG
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -151,10 +148,10 @@ public class PlayerController : MonoBehaviour
         Vector2 leftCheckOrigin = new Vector2(transform.position.x - widthFromCenter - 0.05f, transform.position.y - heightFromCenter);
         Vector2 rightCheckOrigin = new Vector2(transform.position.x + widthFromCenter + 0.05f, transform.position.y - heightFromCenter);
 
-        #if DEBUG
+#if UNITY_EDITOR
         Debug.DrawRay(leftCheckOrigin, Vector2.down, Color.blue);
         Debug.DrawRay(rightCheckOrigin, Vector2.down, Color.blue);
-        #endif
+#endif
 
         RaycastHit2D leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, 0.1f, groundLayers);
         RaycastHit2D rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, 0.1f, groundLayers);
@@ -192,7 +189,10 @@ public class PlayerController : MonoBehaviour
         Vector2.ClampMagnitude(knockBackDirection, 1);
         rb.AddForce(knockBackDirection * knockBackPower, ForceMode2D.Impulse);
         knockedBack = true;
-        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3); // DEBUG
+
+#if UNITY_EDITOR
+        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3);
+#endif
 
         // damage and death
         health--;
