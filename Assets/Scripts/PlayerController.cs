@@ -164,6 +164,16 @@ public class PlayerController : MonoBehaviour
 
     internal IEnumerator TakeDamage(Vector2 enemyPos, float knockBackPower)
     {
+        // only allow one collision to be handled
+        if (!hurtable)
+        {
+            yield break;
+        }
+        hurtable = false;
+
+        // disable collisions between player and enemy layer
+        Physics2D.IgnoreLayerCollision(9, 10, true);
+
         // start with applying movement, this should happen even when invincible
         // set current velocity to 0 to prevent movement affecting knockback
         rb.velocity = Vector2.zero;
@@ -184,18 +194,11 @@ public class PlayerController : MonoBehaviour
         knockedBack = true;
         Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3); // DEBUG
 
-        // if currently invincible from recent damage, exit here
-        if (!hurtable)
-        {
-            yield break;
-        }
-
         // damage and death
         health--;
         if (health <= 0)
         {
             // TODO: do death stuff
-            // don't continue with rest of stuff so body bounces around without doing invuln flash
             yield break;
         }
 
@@ -225,12 +228,11 @@ public class PlayerController : MonoBehaviour
         }
         spriteRenderer.enabled = true;
         knockedBack = false; // just in case, this only makes a difference if character is falling for really long time
+        Physics2D.IgnoreLayerCollision(9, 10, false); // reenable enemy collisions, no cheats here
     }
 
     private IEnumerator InvulnTime()
     {
-        hurtable = false;
-
         yield return new WaitForSeconds(invulnerabilityTime);
 
         hurtable = true;
