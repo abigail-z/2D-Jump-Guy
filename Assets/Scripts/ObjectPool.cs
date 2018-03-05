@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooler : MonoBehaviour {
+public class ObjectPool : MonoBehaviour {
 
     public GameObject objectToPool;
-    public int maxEnemyCount;
-    public static ObjectPooler SharedInstance;
+    public uint maxCount;
+
 
     private Stack<GameObject> pool;
 
     private void Awake()
     {
-        SharedInstance = this;
         pool = new Stack<GameObject>();
     }
 
@@ -19,7 +18,7 @@ public class ObjectPooler : MonoBehaviour {
     void Start ()
     {
         pool.Push(objectToPool);
-        for (uint i = 0; i < maxEnemyCount; ++i)
+        for (uint i = 0; i < maxCount - 1; ++i)
         {
             GameObject obj = Instantiate(objectToPool);
             obj.SetActive(false);
@@ -27,7 +26,7 @@ public class ObjectPooler : MonoBehaviour {
         }
     }
 
-    public GameObject GetPooledObject()
+    public GameObject Pop()
     {
         if (pool.Count > 0)
         {
@@ -37,7 +36,7 @@ public class ObjectPooler : MonoBehaviour {
         return null;
     }
 
-    public void PoolObject(GameObject obj)
+    public void Push(GameObject obj)
     {
         pool.Push(obj);
     }

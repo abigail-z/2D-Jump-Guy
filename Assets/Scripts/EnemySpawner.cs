@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
     public float waitTime;
+    public ObjectPool pool;
 
 	// Use this for initialization
 	void Start ()
@@ -15,7 +16,7 @@ public class EnemySpawner : MonoBehaviour {
     {
         while (true)
         {
-            GameObject obj = ObjectPooler.SharedInstance.GetPooledObject();
+            GameObject obj = pool.Pop();
             if (obj != null)
             {
                 obj.transform.position = transform.position;
