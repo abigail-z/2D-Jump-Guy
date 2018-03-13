@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
         if (!knockedBack)
         {
             moveHorizontal = Input.GetAxisRaw("Horizontal");
+            
 
             if (Input.GetButtonDown("Jump"))
             {
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
             sprite.transform.rotation = Quaternion.identity; // resets to no rotation
             spinDirection = 0;
         }
-	}
+    }
 
     // FixedUpdate is called once per game tick
     void FixedUpdate()

@@ -8,21 +8,23 @@ public class CameraController : MonoBehaviour
     public float maxFollowTime;
     public float maxFollowSpeed;
 
+    private Vector3 origin;
+    private Vector3 cameraPos;
     private Vector3 refVelocity;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
-        Vector3 playerPos = objectToFollow.transform.position;
-        playerPos.z = -1;
-        transform.position = playerPos;
+        origin = transform.position;
+        cameraPos = origin + objectToFollow.transform.position / 2;
+        cameraPos.z = -1;
+        transform.position = cameraPos;
         refVelocity = Vector3.zero;
 	}
 
     void LateUpdate()
     {
-        Vector3 playerPos = objectToFollow.transform.position;
-        playerPos.z = -1;
-        transform.position = Vector3.SmoothDamp(transform.position, playerPos, ref refVelocity, maxFollowTime, maxFollowSpeed, Time.deltaTime);
+        cameraPos = origin + objectToFollow.transform.position / 2;
+        transform.position = Vector3.SmoothDamp(transform.position, cameraPos, ref refVelocity, maxFollowTime, maxFollowSpeed, Time.deltaTime);
     }
 }

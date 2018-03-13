@@ -6,7 +6,6 @@ public class ObjectPool : MonoBehaviour {
     public GameObject objectToPool;
     public uint maxCount;
 
-
     private Stack<GameObject> pool;
 
     private void Awake()
