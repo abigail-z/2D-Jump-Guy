@@ -160,7 +160,12 @@ public class PlayerController : MonoBehaviour
         return leftCheck || rightCheck;
     }
 
-    internal IEnumerator TakeDamage(Vector2 enemyPos, float knockBackPower)
+    public void TakeDamage(Vector2 enemyPos, float knockBackPower)
+    {
+        StartCoroutine(DamageCoroutine(enemyPos, knockBackPower));
+    }
+
+    internal IEnumerator DamageCoroutine(Vector2 enemyPos, float knockBackPower)
     {
         // only allow one collision to be handled
         if (!hurtable)

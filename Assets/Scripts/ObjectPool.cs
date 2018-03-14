@@ -20,6 +20,10 @@ public class ObjectPool : MonoBehaviour {
         {
             GameObject obj = Instantiate(objectToPool);
             obj.SetActive(false);
+
+            Poolable script = obj.GetComponent<Poolable>();
+            script.SetPool(this);
+
             pool.Push(obj);
         }
     }

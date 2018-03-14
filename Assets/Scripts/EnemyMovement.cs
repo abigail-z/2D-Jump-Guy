@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : Poolable
 {
     public float moveSpeed;
     public float knockback;
@@ -57,7 +57,15 @@ public class EnemyMovement : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            StartCoroutine(pc.TakeDamage(transform.position, knockback));
+            pc.TakeDamage(transform.position, knockback);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Kill"))
+        {
+            AddToPool();
         }
     }
 }
