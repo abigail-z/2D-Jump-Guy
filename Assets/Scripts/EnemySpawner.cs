@@ -14,6 +14,9 @@ public class EnemySpawner : MonoBehaviour {
 
     private IEnumerator EnemySpawnCoroutine(float waitTime)
     {
+        // wait for one tick to ensure the ObjectPool is populated
+        yield return new WaitForFixedUpdate();
+
         while (true)
         {
             GameObject obj = pool.Pop();
@@ -22,6 +25,12 @@ public class EnemySpawner : MonoBehaviour {
                 obj.transform.position = transform.position;
                 obj.SetActive(true);
             }
+#if UNITY_EDITOR
+            else
+            {
+                Debug.Log("ObjectPool empty");
+            }
+#endif
 
             yield return new WaitForSeconds(waitTime);
         }
