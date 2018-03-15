@@ -22,17 +22,16 @@ public class EnemySpawner : MonoBehaviour {
         while (true)
         {
             GameObject obj = pool.Pop();
-            if (obj != null)
+            if (obj == null)
             {
-                obj.transform.position = transform.position;
-                obj.SetActive(true);
-            }
 #if UNITY_EDITOR
-            else
-            {
-                Debug.Log("ObjectPool empty");
-            }
+                Debug.Log("ObjectPool empty, creating new");
 #endif
+                obj = pool.Create();
+            }
+
+            obj.transform.position = transform.position;
+            obj.SetActive(true);
 
             yield return new WaitForSeconds(waitTime);
         }

@@ -243,4 +243,12 @@ public class PlayerController : MonoBehaviour
 
         hurtable = true;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Kill"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

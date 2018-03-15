@@ -128,7 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a0bfe8e98f4384f98c6107279ce992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  pool: {fileID: 0}
+  moveSpeed: 8
   knockback: 20
   wallLayers:
     serializedVersion: 2
