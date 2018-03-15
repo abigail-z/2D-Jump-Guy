@@ -519,7 +519,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4192434712060276, guid: 3cd2192b1b037284f9c3e3487c7bbf82, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4192434712060276, guid: 3cd2192b1b037284f9c3e3487c7bbf82, type: 2}
       propertyPath: m_LocalScale.y
@@ -692,12 +692,12 @@ Prefab:
     - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
         type: 2}
       propertyPath: m_BackGroundColor.g
-      value: 0.07352942
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20057062977837094, guid: c573236cee4908b4b8f7791f6f4a49d1,
         type: 2}
       propertyPath: m_BackGroundColor.b
-      value: 0.07352941
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c573236cee4908b4b8f7791f6f4a49d1, type: 2}
@@ -980,7 +980,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4230514786071010, guid: 75743ba577b5714478d1515d790cf368, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114473880700973706, guid: 75743ba577b5714478d1515d790cf368,
         type: 2}
@@ -1519,7 +1519,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1468031786}
   m_Layer: 0
-  m_Name: Fadeout
+  m_Name: Hole Fadeout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1548,7 +1548,7 @@ Transform:
   - {fileID: 1045145811}
   - {fileID: 1739392229}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1472743520 stripped
 Transform:
@@ -1738,7 +1738,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4705053787540170, guid: 454f3d9021390e941a9f438aaef79d76, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1543153299847250, guid: 454f3d9021390e941a9f438aaef79d76, type: 2}
       propertyPath: m_Icon
