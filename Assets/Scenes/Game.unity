@@ -978,12 +978,12 @@ Prefab:
     - target: {fileID: 114464099450650994, guid: 454f3d9021390e941a9f438aaef79d76,
         type: 2}
       propertyPath: maxCount
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114870752910617750, guid: 454f3d9021390e941a9f438aaef79d76,
         type: 2}
       propertyPath: waitTime
-      value: 10
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 114464099450650994, guid: 454f3d9021390e941a9f438aaef79d76,
         type: 2}
@@ -1030,11 +1030,11 @@ Transform:
   - {fileID: 405514704}
   - {fileID: 2012791195}
   - {fileID: 2074677313}
-  - {fileID: 1048401523}
   - {fileID: 1158513628}
+  - {fileID: 1048401523}
   - {fileID: 1717949687}
-  - {fileID: 779159963}
   - {fileID: 217403307}
+  - {fileID: 779159963}
   - {fileID: 276604245}
   - {fileID: 1472743520}
   - {fileID: 1766636645}

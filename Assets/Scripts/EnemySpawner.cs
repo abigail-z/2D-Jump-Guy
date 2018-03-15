@@ -4,11 +4,13 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
     public float waitTime;
-    public ObjectPool pool;
+
+    private ObjectPool pool;
 
 	// Use this for initialization
 	void Start ()
     {
+        pool = GetComponent<ObjectPool>();
         StartCoroutine(EnemySpawnCoroutine(waitTime));
 	}
 
