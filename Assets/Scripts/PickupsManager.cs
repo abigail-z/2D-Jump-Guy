@@ -18,7 +18,7 @@ public class PickupsManager : MonoBehaviour
         }
 
         uint index = (uint)Random.Range(0, pickups.Length);
-        pickups[index].gameObject.SetActive(true);
+        pickups[index].Activate();
     }
 
     public void PickupCollected(uint i)
@@ -33,6 +33,6 @@ public class PickupsManager : MonoBehaviour
         Debug.Log("Spawning pickup " + index);
 #endif
 
-        pickups[index].gameObject.SetActive(true);
+        pickups[index].Activate();
     }
 }
