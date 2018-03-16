@@ -29,9 +29,6 @@ public class PickupsManager : MonoBehaviour
             index = (uint)Random.Range(0, pickups.Length);
         }
         while (index == i);
-#if UNITY_EDITOR
-        Debug.Log("Spawning pickup " + index);
-#endif
 
         pickups[index].Activate();
     }
