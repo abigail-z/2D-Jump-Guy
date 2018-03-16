@@ -1046,14 +1046,6 @@ Prefab:
       propertyPath: m_Name
       value: Pickup (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 1112927152259282, guid: 8c0b67d41d72749478f6d801525932d7, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1112927152259282, guid: 8c0b67d41d72749478f6d801525932d7, type: 2}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8c0b67d41d72749478f6d801525932d7, type: 2}
   m_IsPrefabParent: 0
@@ -3171,7 +3163,7 @@ Prefab:
     - target: {fileID: 114464099450650994, guid: 454f3d9021390e941a9f438aaef79d76,
         type: 2}
       propertyPath: maxCount
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114870752910617750, guid: 454f3d9021390e941a9f438aaef79d76,
         type: 2}
