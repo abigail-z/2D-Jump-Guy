@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     public uint jumpLenienceTicks;
     public float spinsPerSecond;
-    public GameObject sprite;
     public LayerMask groundLayers;
     public uint maxHealth;
     public float invulnerabilityTime;
@@ -23,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private uint jumpWindow;
     private bool knockedBack;
     private bool hurtable;
+    private Transform sprite;
     private SpriteRenderer spriteRenderer;
     private float widthFromCenter;
     private float heightFromCenter;
@@ -35,7 +35,9 @@ public class PlayerController : MonoBehaviour
     void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = sprite.GetComponent<SpriteRenderer>();
+
+        sprite = transform.GetChild(0);
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         isGrounded = GroundCheck();
         jumpWindow = isGrounded ? jumpLenienceTicks : 0;
@@ -77,12 +79,12 @@ public class PlayerController : MonoBehaviour
             
             if (spinDirection != 0)
             {
-                sprite.transform.Rotate(new Vector3(0, 0, spinDirection * 360) * Time.deltaTime * spinsPerSecond);
+                sprite.Rotate(new Vector3(0, 0, spinDirection * 360) * Time.deltaTime * spinsPerSecond);
             }
         }
         else
         {
-            sprite.transform.rotation = Quaternion.identity; // resets to no rotation
+            sprite.rotation = Quaternion.identity; // resets to no rotation
             spinDirection = 0;
         }
     }
@@ -181,14 +183,12 @@ public class PlayerController : MonoBehaviour
         // set current velocity to 0 to prevent movement affecting knockback
         rb.velocity = Vector2.zero;
 
-        // if grounded, send at a horizontal
-        Vector2 knockBackDirection = (Vector2)rb.position - enemyPos;
+        // if grounded, send at a diagonal
+        Vector2 knockBackDirection = rb.position - enemyPos;
         if (isGrounded)
         {
-            knockBackDirection += Vector2.up;
-            Vector2 pos = rb.position;
-            pos.x += 0.01f;
-            rb.position = pos;
+            knockBackDirection = new Vector2(knockBackDirection.x > 0 ? 1 : -1, 1);
+            rb.position += Vector2.up * 0.01f;
         }
 
         // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
@@ -249,6 +249,14 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Kill"))
         {
             gameObject.SetActive(false);
+            return;
+        }
+
+        if (other.CompareTag("Pickup"))
+        {
+            PickupBehavior pickup = other.GetComponent<PickupBehavior>();
+            pickup.GetPickedUp();
+            return;
         }
     }
 }

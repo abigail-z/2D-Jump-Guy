@@ -129,10 +129,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpPower: 20
+  jumpPower: 25
   jumpLenienceTicks: 5
   spinsPerSecond: 2
-  sprite: {fileID: 1035908864079712}
   groundLayers:
     serializedVersion: 2
     m_Bits: 256

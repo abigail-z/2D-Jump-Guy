@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : MonoBehaviour
+{
 
     public float waitTime;
 
@@ -16,9 +17,6 @@ public class EnemySpawner : MonoBehaviour {
 
     private IEnumerator EnemySpawnCoroutine(float waitTime)
     {
-        // wait for one tick to ensure the ObjectPool is populated
-        yield return new WaitForFixedUpdate();
-
         while (true)
         {
             GameObject obj = pool.Pop();

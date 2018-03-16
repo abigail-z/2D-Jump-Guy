@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour {
+public class ObjectPool : MonoBehaviour
+{
 
     public GameObject objectToPool;
     public uint maxCount;
@@ -11,11 +12,7 @@ public class ObjectPool : MonoBehaviour {
     private void Awake()
     {
         pool = new Stack<GameObject>();
-    }
 
-    // Use this for initialization
-    void Start ()
-    {
         for (uint i = 0; i < maxCount; ++i)
         {
             GameObject obj = Instantiate(objectToPool);
