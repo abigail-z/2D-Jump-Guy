@@ -188,7 +188,6 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             knockBackDirection = new Vector2(knockBackDirection.x > 0 ? 1 : -1, 1);
-            rb.position += Vector2.up * 0.01f;
         }
 
         // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
