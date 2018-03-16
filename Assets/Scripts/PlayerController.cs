@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float damageFlashPeriod;
     public float freezeFrameLength;
     public float freezeFrameTimescale;
+    public uint initialHealth;
 
     // private vars
     private uint health;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private float moveHorizontal;
     private bool jumpPressed;
     private bool jumpReleased;
+    private bool alive;
 
     // Use this for initialization
     void Start ()
@@ -50,12 +52,16 @@ public class PlayerController : MonoBehaviour
         moveHorizontal = 0f;
         jumpPressed = false;
         jumpReleased = false;
+
+        health = initialHealth;
+        GameManager.instance.UpdateHealth(health);
+        alive = true;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (!knockedBack)
+        if (!knockedBack && alive)
         {
             moveHorizontal = Input.GetAxisRaw("Horizontal");
             
@@ -201,10 +207,10 @@ public class PlayerController : MonoBehaviour
 
         // damage and death
         health--;
+        GameManager.instance.UpdateHealth(health);
         if (health <= 0)
         {
-            // TODO: do death stuff
-            yield break;
+            alive = false;
         }
 
         // freezeframe
@@ -255,6 +261,7 @@ public class PlayerController : MonoBehaviour
         {
             PickupBehavior pickup = other.GetComponent<PickupBehavior>();
             pickup.GetPickedUp();
+            GameManager.instance.IncreaseScore();
             return;
         }
     }
