@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
             }
 
             pauseScreen.SetActive(paused);
+            Cursor.visible = paused;
         }
     }
 
@@ -52,6 +53,8 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString();
         gameOverScreen.SetActive(false);
         pauseScreen.SetActive(false);
+
+        Cursor.visible = false;
     }
 
     public void IncreaseScore()
@@ -72,6 +75,8 @@ public class GameManager : MonoBehaviour
         healthText.gameObject.SetActive(false);
         finalScoreText.text = "Score: " + score;
         gameOverScreen.SetActive(true);
+
+        Cursor.visible = true;
     }
 
     public void Restart()
