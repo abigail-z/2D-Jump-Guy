@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI healthText;
+    public TextMeshProUGUI finalScoreText;
+    public GameObject gameOverScreen;
+    public GameObject pauseScreen;
     public EnemySpawner spawner;
     public float waitTimePerScore;
 
     public static GameManager instance;
     private uint score;
+    private bool paused;
 
     private void Awake()
     {
@@ -21,11 +26,32 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
+    public void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            paused = !paused;
+            if (paused)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+
+            pauseScreen.SetActive(paused);
+        }
+    }
+
     // Use this for initialization
     void Start ()
     {
         score = 0;
+        paused = false;
         scoreText.text = score.ToString();
+        gameOverScreen.SetActive(false);
+        pauseScreen.SetActive(false);
     }
 
     public void IncreaseScore()
@@ -39,4 +65,28 @@ public class GameManager : MonoBehaviour
     {
         healthText.text = health.ToString();
     }
+
+    public void GameOver()
+    {
+        scoreText.gameObject.SetActive(false);
+        healthText.gameObject.SetActive(false);
+        finalScoreText.text = "Score: " + score;
+        gameOverScreen.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
+    }
+
 }

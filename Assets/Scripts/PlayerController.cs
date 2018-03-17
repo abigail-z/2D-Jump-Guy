@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float widthFromCenter;
     private float heightFromCenter;
+    private Color color;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
         health = initialHealth;
         GameManager.instance.UpdateHealth(health);
         alive = true;
+        color = spriteRenderer.color;
     }
 	
 	// Update is called once per frame
@@ -206,11 +208,22 @@ public class PlayerController : MonoBehaviour
 #endif
 
         // damage and death
-        health--;
-        GameManager.instance.UpdateHealth(health);
-        if (health <= 0)
+        if (health > 0)
         {
+            health--;
+            GameManager.instance.UpdateHealth(health);
+        }
+
+        if (health <= 0 && alive)
+        {
+            GameManager.instance.GameOver();
+            health = 0;
+            color = Color.grey;
+            spriteRenderer.color = color;
             alive = false;
+            moveHorizontal = 0;
+            jumpPressed = false;
+            jumpReleased = false;
         }
 
         // freezeframe
@@ -218,7 +231,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = Color.white;
         yield return new WaitForSecondsRealtime(freezeFrameLength);
         Time.timeScale = 1;
-        spriteRenderer.color = Color.green;
+        spriteRenderer.color = color;
 
         // start invulnerability timer
         StartCoroutine(InvulnTime());
@@ -253,11 +266,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Kill"))
         {
+            GameManager.instance.GameOver();
             gameObject.SetActive(false);
             return;
         }
 
-        if (other.CompareTag("Pickup"))
+        if (other.CompareTag("Pickup") && alive)
         {
             PickupBehavior pickup = other.GetComponent<PickupBehavior>();
             pickup.GetPickedUp();
