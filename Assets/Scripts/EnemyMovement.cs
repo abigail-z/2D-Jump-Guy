@@ -16,15 +16,7 @@ public class EnemyMovement : Poolable
         rb = GetComponent<Rigidbody2D>();
         widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
 
-        // get movement direction
-        if (Random.value >= 0.5)
-        {
-            direction = 1; // right
-        }
-        else
-        {
-            direction = -1; // left
-        }
+        direction = Random.value >= 0.5 ? 1 : -1;
 	}
 
     void FixedUpdate()
@@ -65,7 +57,7 @@ public class EnemyMovement : Poolable
     {
         if (collision.CompareTag("Kill"))
         {
-            AddToPool();
+            ReturnToPool();
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
+
 public class Poolable : MonoBehaviour
 {
-    public ObjectPool pool;
-    public void SetPool(ObjectPool pool)
-    {
-        this.pool = pool;
-    }
+    public ObjectPool Pool { set { pool = value; } }
+    private ObjectPool pool;
 
-    public void AddToPool()
+    public void ReturnToPool()
     {
         gameObject.SetActive(false);
         pool.Push(gameObject);

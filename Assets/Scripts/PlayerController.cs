@@ -213,8 +213,7 @@ public class PlayerController : MonoBehaviour
             health--;
             GameManager.instance.UpdateHealth(health);
         }
-
-        if (health <= 0 && alive)
+        else if (alive)
         {
             GameManager.instance.GameOver();
             health = 0;
@@ -239,20 +238,12 @@ public class PlayerController : MonoBehaviour
         // invulerability flashing
         while (!hurtable)
         {
-            if (spriteRenderer.enabled)
-            {
-                spriteRenderer.enabled = false;
-            }
-            else
-            {
-                spriteRenderer.enabled = true;
-            }
-
+            spriteRenderer.enabled = !spriteRenderer.enabled;
             yield return new WaitForSeconds(damageFlashPeriod);
         }
         spriteRenderer.enabled = true;
-        knockedBack = false; // just in case, this only makes a difference if character is falling for really long time
-        Physics2D.IgnoreLayerCollision(9, 10, false); // reenable enemy collisions, no cheats here
+        knockedBack = false; // just in case, only matters is player is still falling somehow
+        Physics2D.IgnoreLayerCollision(9, 10, false); // reenable enemy collisions
     }
 
     private IEnumerator InvulnTime()

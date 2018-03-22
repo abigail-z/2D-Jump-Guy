@@ -25,13 +25,9 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         if (objectToFollow.activeInHierarchy)
-        {
             cameraPos = origin + objectToFollow.transform.position / 2;
-        }
         else
-        {
             cameraPos = origin;
-        }
         transform.position = Vector3.SmoothDamp(transform.position, cameraPos, ref refVelocity, maxFollowTime, maxFollowSpeed, Time.deltaTime);
     }
 }
