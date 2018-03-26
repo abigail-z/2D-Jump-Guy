@@ -97,9 +97,13 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called once per game tick
     void FixedUpdate()
     {
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
-
         isGrounded = GroundCheck();
+
+        if (!alive)
+        {
+            return;
+        }
+
         if (isGrounded)
         {
             jumpWindow = jumpLenienceTicks;
@@ -118,6 +122,8 @@ public class PlayerController : MonoBehaviour
             }
             knockedBack = false;
         }
+
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
 
         // horizontal movement
         Vector2 myVelocity = rb.velocity;
@@ -199,7 +205,7 @@ public class PlayerController : MonoBehaviour
 
         // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
         Vector2.ClampMagnitude(knockBackDirection, 1);
-        rb.AddForce(knockBackDirection * knockBackPower, ForceMode2D.Impulse);
+        rb.velocity = knockBackDirection * knockBackPower;
         knockedBack = true;
 
 #if UNITY_EDITOR
