@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(DamageCoroutine(enemyPos, knockBackPower));
     }
 
-    internal IEnumerator DamageCoroutine(Vector2 enemyPos, float knockBackPower)
+    private IEnumerator DamageCoroutine(Vector2 enemyPos, float knockBackPower)
     {
         // only allow one collision to be handled
         if (!hurtable)
