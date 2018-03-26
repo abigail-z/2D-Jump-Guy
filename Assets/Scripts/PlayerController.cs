@@ -192,10 +192,6 @@ public class PlayerController : MonoBehaviour
         // disable collisions between player and enemy layer
         Physics2D.IgnoreLayerCollision(9, 10, true);
 
-        // start with applying movement, this should happen even when invincible
-        // set current velocity to 0 to prevent movement affecting knockback
-        rb.velocity = Vector2.zero;
-
         // if grounded, send at a diagonal
         Vector2 knockBackDirection = rb.position - enemyPos;
         if (isGrounded)
