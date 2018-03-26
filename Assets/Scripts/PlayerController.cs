@@ -65,9 +65,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!knockedBack && alive)
         {
-            moveHorizontal = Input.GetAxisRaw("Horizontal");
-            
-
             if (Input.GetButtonDown("Jump"))
             {
                 jumpPressed = true;
@@ -100,6 +97,8 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called once per game tick
     void FixedUpdate()
     {
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+
         isGrounded = GroundCheck();
         if (isGrounded)
         {
@@ -208,7 +207,7 @@ public class PlayerController : MonoBehaviour
 #endif
 
         // damage and death
-        if (health > 0)
+        if (health > 1)
         {
             health--;
             GameManager.instance.UpdateHealth(health);
