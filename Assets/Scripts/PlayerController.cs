@@ -1,7 +1,4 @@
-﻿#define DEBUG
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,13 +7,13 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     public uint jumpLenienceTicks;
     public float spinsPerSecond;
-    public GameObject sprite;
     public LayerMask groundLayers;
     public uint maxHealth;
     public float invulnerabilityTime;
     public float damageFlashPeriod;
     public float freezeFrameLength;
     public float freezeFrameTimescale;
+    public uint initialHealth;
 
     // private vars
     private uint health;
@@ -26,19 +23,24 @@ public class PlayerController : MonoBehaviour
     private uint jumpWindow;
     private bool knockedBack;
     private bool hurtable;
+    private Transform sprite;
     private SpriteRenderer spriteRenderer;
     private float widthFromCenter;
     private float heightFromCenter;
+    private Color color;
     // input vars
     private float moveHorizontal;
     private bool jumpPressed;
     private bool jumpReleased;
+    private bool alive;
 
     // Use this for initialization
     void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = sprite.GetComponent<SpriteRenderer>();
+
+        sprite = transform.GetChild(0);
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         isGrounded = GroundCheck();
         jumpWindow = isGrounded ? jumpLenienceTicks : 0;
@@ -51,15 +53,18 @@ public class PlayerController : MonoBehaviour
         moveHorizontal = 0f;
         jumpPressed = false;
         jumpReleased = false;
+
+        health = initialHealth;
+        GameManager.instance.UpdateHealth(health);
+        alive = true;
+        color = spriteRenderer.color;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (!knockedBack)
+        if (!knockedBack && alive)
         {
-            moveHorizontal = Input.GetAxisRaw("Horizontal");
-
             if (Input.GetButtonDown("Jump"))
             {
                 jumpPressed = true;
@@ -79,20 +84,26 @@ public class PlayerController : MonoBehaviour
             
             if (spinDirection != 0)
             {
-                sprite.transform.Rotate(new Vector3(0, 0, spinDirection * 360) * Time.deltaTime * spinsPerSecond);
+                sprite.Rotate(new Vector3(0, 0, spinDirection * 360) * Time.deltaTime * spinsPerSecond);
             }
         }
         else
         {
-            sprite.transform.rotation = Quaternion.identity; // resets to no rotation
+            sprite.rotation = Quaternion.identity; // resets to no rotation
             spinDirection = 0;
         }
-	}
+    }
 
     // FixedUpdate is called once per game tick
     void FixedUpdate()
     {
         isGrounded = GroundCheck();
+
+        if (!alive)
+        {
+            return;
+        }
+
         if (isGrounded)
         {
             jumpWindow = jumpLenienceTicks;
@@ -111,6 +122,8 @@ public class PlayerController : MonoBehaviour
             }
             knockedBack = false;
         }
+
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
 
         // horizontal movement
         Vector2 myVelocity = rb.velocity;
@@ -151,10 +164,10 @@ public class PlayerController : MonoBehaviour
         Vector2 leftCheckOrigin = new Vector2(transform.position.x - widthFromCenter - 0.05f, transform.position.y - heightFromCenter);
         Vector2 rightCheckOrigin = new Vector2(transform.position.x + widthFromCenter + 0.05f, transform.position.y - heightFromCenter);
 
-        #if DEBUG
+#if UNITY_EDITOR
         Debug.DrawRay(leftCheckOrigin, Vector2.down, Color.blue);
         Debug.DrawRay(rightCheckOrigin, Vector2.down, Color.blue);
-        #endif
+#endif
 
         RaycastHit2D leftCheck = Physics2D.Raycast(leftCheckOrigin, Vector2.down, 0.1f, groundLayers);
         RaycastHit2D rightCheck = Physics2D.Raycast(rightCheckOrigin, Vector2.down, 0.1f, groundLayers);
@@ -162,41 +175,55 @@ public class PlayerController : MonoBehaviour
         return leftCheck || rightCheck;
     }
 
-    internal IEnumerator TakeDamage(Vector2 enemyPos, float knockBackPower)
+    public void TakeDamage(Vector2 enemyPos, float knockBackPower)
     {
-        // start with applying movement, this should happen even when invincible
-        // set current velocity to 0 to prevent movement affecting knockback
-        rb.velocity = Vector2.zero;
+        StartCoroutine(DamageCoroutine(enemyPos, knockBackPower));
+    }
 
-        // if grounded, send at a horizontal
-        Vector2 knockBackDirection = (Vector2)rb.position - enemyPos;
-        if (isGrounded)
-        {
-            knockBackDirection += Vector2.up;
-            Vector2 pos = rb.position;
-            pos.x += 0.01f;
-            rb.position = pos;
-        }
-
-        // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
-        Vector2.ClampMagnitude(knockBackDirection, 1);
-        rb.AddForce(knockBackDirection * knockBackPower, ForceMode2D.Impulse);
-        knockedBack = true;
-        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3); // DEBUG
-
-        // if currently invincible from recent damage, exit here
+    private IEnumerator DamageCoroutine(Vector2 enemyPos, float knockBackPower)
+    {
+        // only allow one collision to be handled
         if (!hurtable)
         {
             yield break;
         }
+        hurtable = false;
+
+        // disable collisions between player and enemy layer
+        Physics2D.IgnoreLayerCollision(9, 10, true);
+
+        // if grounded, send at a diagonal
+        Vector2 knockBackDirection = rb.position - enemyPos;
+        if (isGrounded)
+        {
+            knockBackDirection = new Vector2(knockBackDirection.x > 0 ? 1 : -1, 1);
+        }
+
+        // clamp the magnitude then apply knockback. also set knocked back state to ingore inputs
+        Vector2.ClampMagnitude(knockBackDirection, 1);
+        rb.velocity = knockBackDirection * knockBackPower;
+        knockedBack = true;
+
+#if UNITY_EDITOR
+        Debug.DrawRay(rb.position, knockBackDirection, Color.magenta, 3);
+#endif
 
         // damage and death
-        health--;
-        if (health <= 0)
+        if (health > 1)
         {
-            // TODO: do death stuff
-            // don't continue with rest of stuff so body bounces around without doing invuln flash
-            yield break;
+            health--;
+            GameManager.instance.UpdateHealth(health);
+        }
+        else if (alive)
+        {
+            GameManager.instance.GameOver();
+            health = 0;
+            color = Color.grey;
+            spriteRenderer.color = color;
+            alive = false;
+            moveHorizontal = 0;
+            jumpPressed = false;
+            jumpReleased = false;
         }
 
         // freezeframe
@@ -204,7 +231,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = Color.white;
         yield return new WaitForSecondsRealtime(freezeFrameLength);
         Time.timeScale = 1;
-        spriteRenderer.color = Color.green;
+        spriteRenderer.color = color;
 
         // start invulnerability timer
         StartCoroutine(InvulnTime());
@@ -212,27 +239,36 @@ public class PlayerController : MonoBehaviour
         // invulerability flashing
         while (!hurtable)
         {
-            if (spriteRenderer.enabled)
-            {
-                spriteRenderer.enabled = false;
-            }
-            else
-            {
-                spriteRenderer.enabled = true;
-            }
-
+            spriteRenderer.enabled = !spriteRenderer.enabled;
             yield return new WaitForSeconds(damageFlashPeriod);
         }
         spriteRenderer.enabled = true;
-        knockedBack = false; // just in case, this only makes a difference if character is falling for really long time
+        knockedBack = false; // just in case, only matters is player is still falling somehow
+        Physics2D.IgnoreLayerCollision(9, 10, false); // reenable enemy collisions
     }
 
     private IEnumerator InvulnTime()
     {
-        hurtable = false;
-
         yield return new WaitForSeconds(invulnerabilityTime);
 
         hurtable = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Kill"))
+        {
+            GameManager.instance.GameOver();
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (other.CompareTag("Pickup") && alive)
+        {
+            PickupBehavior pickup = other.GetComponent<PickupBehavior>();
+            pickup.GetPickedUp();
+            GameManager.instance.IncreaseScore();
+            return;
+        }
     }
 }

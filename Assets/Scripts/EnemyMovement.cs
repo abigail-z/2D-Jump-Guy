@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : Poolable
 {
     public float moveSpeed;
     public float knockback;
@@ -16,15 +16,7 @@ public class EnemyMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         widthFromCenter = GetComponent<Collider2D>().bounds.extents.x;
 
-        // get movement direction
-        if (Random.value >= 0.5)
-        {
-            direction = 1; // right
-        }
-        else
-        {
-            direction = -1; // left
-        }
+        direction = Random.value >= 0.5 ? 1 : -1;
 	}
 
     void FixedUpdate()
@@ -57,7 +49,15 @@ public class EnemyMovement : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            StartCoroutine(pc.TakeDamage(transform.position, knockback));
+            pc.TakeDamage(transform.position, knockback);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Kill"))
+        {
+            ReturnToPool();
         }
     }
 }
